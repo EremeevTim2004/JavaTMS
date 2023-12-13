@@ -3,8 +3,8 @@ package com.test_task.taskmanagementsystem.model;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class User {
@@ -12,6 +12,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Date birthday;
     @Column(unique = true)
     private String email;
     private String password; // Hash
@@ -23,8 +24,9 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, Date birthday) {
         this.name = name;
+        this.birthday = birthday;
         this.email = email;
         this.password = password;
     }
@@ -33,16 +35,12 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Date getBirthday() {
+        return birthday;
     }
 
     public String getEmail() {
@@ -59,18 +57,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email);
     }
 }

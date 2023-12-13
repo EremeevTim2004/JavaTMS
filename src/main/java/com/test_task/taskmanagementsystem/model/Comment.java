@@ -3,8 +3,6 @@ package com.test_task.taskmanagementsystem.model;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
-import java.util.Objects;
-
 @Entity
 public class Comment {
     @Id
@@ -20,7 +18,6 @@ public class Comment {
 
     public Comment() {
     }
-
     public Comment(String text, User author, Task task) {
         this.text = text;
         this.author = author;
@@ -49,18 +46,5 @@ public class Comment {
 
     public void setTask(Task task) {
         this.task = task;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Comment comment = (Comment) o;
-        return Objects.equals(id, comment.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

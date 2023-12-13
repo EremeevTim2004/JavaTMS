@@ -3,23 +3,14 @@ package com.test_task.taskmanagementsystem.model;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Task {
-    public enum TaskStatus {
-        IN_PROGRESS,
-        COMPLETED,
-        PENDING
-    }
+    public enum TaskStatus {IN_PROGRESS, COMPLETED, PENDING}
 
-    public enum TaskPriority {
-        HIGH,
-        MEDIUM,
-        LOW
-    }
-
+    public enum TaskPriority {HIGH, MEDIUM, LOW}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,19 +26,27 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
+    private Date taskCreationData;
+    private Date taskDeadlineData;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public Task() {
     }
 
-    public Task(String title, String description, TaskStatus status, TaskPriority priority, User author, User assignee) {
+    public Task(String title, String description, TaskStatus status, TaskPriority priority, User author, User assignee, Date creationDate, Date deadline) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.priority = priority;
         this.author = author;
         this.assignee = assignee;
+        this.taskCreationData = creationDate;
+        this.taskDeadlineData = deadline;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
     public String getTitle() {
@@ -86,10 +85,6 @@ public class Task {
         return author;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
     public User getAssignee() {
         return assignee;
     }
@@ -98,16 +93,15 @@ public class Task {
         this.assignee = assignee;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id);
+    public Date getTaskCreationData() {
+        return taskCreationData;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public Date getTaskDeadlineData() {
+        return taskDeadlineData;
+    }
+
+    public void setTaskDeadlineData(Date deadline) {
+        this.taskDeadlineData = deadline;
     }
 }

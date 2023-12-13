@@ -10,30 +10,50 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
-    private final TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getTasksByAuthor(User author) {
-        return taskRepository.findByAuthor(author);
+    public Optional<Task> getById(Long taskId) {
+        return taskRepository.findById(taskId);
     }
 
-    public List<Task> getTasksByAssignee(User assignee) {
-        return taskRepository.findByAssignee(assignee);
+    public List<Task> getByAuthorId(User author) {
+        return taskRepository.findByAuthorId(author.getId());
     }
 
-    public Optional<Task> getTaskByIdAndAuthor(Long id, User author) {
-        return taskRepository.findByIdAndAuthor(id, author);
+    public List<Task> getByAssignee(User assignee) {
+        return taskRepository.findByAssigneeId(assignee.getId());
     }
 
-    public Optional<Task> getTaskByIdAndAssignee(Long id, User assignee) {
-        return taskRepository.findByIdAndAssignee(id, assignee);
+    public List<Task> getByAuthorIdAndAssigneeId(User author, User assignee) {
+        return taskRepository.findByAuthorIdAndAssigneeId(author.getId(), assignee.getId());
     }
-
     public Task createTask(Task task) {
-        // Добавьте логику для создания задачи
+        // Добавть логику
         return taskRepository.save(task);
+    }
+
+    // fix & update
+    public Task updateTask(Long taskId, Task updatedTask) {
+        Optional<Task> existingTask = taskRepository.findById(taskId);
+        if(existingTask.isPresent()) {
+            Task currentTask = existingTask.get();
+            currentTask.setTitle(updatedTask.getTitle());
+            currentTask.setDescription(updatedTask.getDescription());
+            currentTask.setAssignee(updatedTask.getAssignee());
+            currentTask.setPriority(updatedTask.getPriority());
+            currentTask.setStatus(updatedTask.getStatus());
+            currentTask.setTaskDeadlineData(updatedTask.getTaskDeadlineData());
+            return taskRepository.save(currentTask);
+        } else {
+            return null;
+        }
+    }
+
+    public void deleteTask(Long commentId) {
+        taskRepository.deleteById(commentId);
     }
 }
